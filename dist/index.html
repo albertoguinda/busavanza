@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa de Autobuses Zaragoza</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        font-family: sans-serif;
+        height: 100vh;
+      }
+
+      #sidebar {
+        width: 300px;
+        background-color: #f4f4f4;
+        padding: 1rem;
+        overflow-y: auto;
+        border-right: 1px solid #ccc;
+      }
+
+      .bus-line {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .bus-line h3 {
+        margin-bottom: 0.3rem;
+        color: #333;
+      }
+
+      .discount {
+        color: green;
+        font-weight: bold;
+      }
+
+      .no-discount {
+        color: red;
+        font-weight: bold;
+      }
+
+      #map {
+        flex: 1;
+      }
+
+      .bus-icon {
+        width: 24px;
+        height: 24px;
+        color: blue;
+      }
+      .green-discount {
+        color: green;
+      }
+
+      .original-price {
+        text-decoration: line-through;
+        color: red;
+      }
+
+      /* Estilos para el botón Mostrar Bus */
+      .btn-show {
+        background-color: red; /* Fondo rojo */
+        color: white; /* Letra blanca */
+        padding: 10px 20px; /* Espaciado alrededor del texto */
+        font-size: 16px; /* Tamaño de la letra */
+        border: none; /* Sin borde */
+        border-radius: 5px; /* Bordes redondeados */
+        cursor: pointer; /* Cambia el cursor a mano */
+        transition: background-color 0.3s; /* Transición suave al pasar el ratón */
+      }
+
+      .btn-show:hover {
+        background-color: darkred; /* Fondo más oscuro al pasar el ratón */
+      }
+
+      #titulo-lineas {
+        padding: 1rem; /* Espaciado alrededor de la imagen */
+        text-align: center; /* Centrar el contenido dentro del h2 */
+        border-radius: 5px; /* Bordes redondeados */
+        margin-bottom: 1.5rem; /* Espacio inferior */
+        display: flex; /* Usar flexbox para centrar la imagen */
+        justify-content: center; /* Centrar la imagen horizontalmente */
+        align-items: center; /* Centrar la imagen verticalmente */
+        height: 100px; /* Definir una altura fija para el h2 */
+        width: 100%; /* Asegura que el h2 ocupe todo el ancho disponible */
+      }
+
+      /* Estilo para la imagen dentro del h2 */
+      #titulo-lineas .logo-img {
+        height: auto; /* Mantener la proporción original de la imagen */
+        max-height: 150px; /* Limitar la altura máxima para que no se desborde */
+        max-width: 100%; /* Asegurarse de que la imagen no exceda el contenedor */
+      }
+
+      #search-bus {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      #show-all-btn {
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 1rem;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #show-all-btn:hover {
+        background-color: #0056b3;
+      }
+      /* Estilo para los puntos respira, aplicado solo si hay descuento */
+      #puntos-respira {
+        color: green;
+        font-weight: bold;
+      }
+      /* Estilo para el nuevo sidebar pequeño a la derecha */
+      #respira-sidebar {
+        position: absolute;
+        top: 20px; /* Ajustamos para que esté un poco por debajo del borde superior */
+        right: 10px; /* Pegado a la derecha */
+        background-color: #f4f4f4;
+        padding: 1rem;
+        width: 150px; /* Ancho fijo del sidebar */
+        height: auto; /* Deja que el contenido determine la altura */
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border: 1px solid #ccc;
+        z-index: 1000; /* Asegura que esté por encima del mapa */
+      }
+
+      /* Estilo del título en el sidebar */
+      #respira-sidebar h4 {
+        color: green;
+        margin-bottom: 0.5rem;
+        font-size: 18px; /* Reducimos el tamaño de fuente */
+      }
+
+      /* Estilo del texto de Puntos Respira */
+      #respira-sidebar p {
+        font-size: 13px;
+        font-weight: bold;
+        color: green;
+        margin-top: 0; /* Sin márgenes extra */
+      }
+
+      /* Ajustamos el mapa para que no cubra el sidebar */
+    </style>
+    <script type="module" crossorigin src="/assets/index-CRtldyKH.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CIGW-MKW.css">
+  </head>
+  <body>
+    <div id="sidebar">
+      <h2 id="titulo-lineas">
+        <img src="/assets/AVANZA_Logo-DFR-Lskx.png" alt="Logo de Avanza" class="logo-img" />
+      </h2>
+      <input
+        type="text"
+        id="search-bus"
+        placeholder="Buscar línea de autobús"
+        oninput="buscarLinea()"
+      />
+      <button
+        id="show-all-btn"
+        style="display: none"
+        onclick="mostrarTodasLineas()"
+      >
+        Mostrar todas
+      </button>
+
+      <div id="bus-info-container">
+        <!-- Aquí se agregará la info desde JS -->
+      </div>
+    </div>
+
+    <!-- Sidebar con puntos respira -->
+    <div id="respira-sidebar">
+      <h4>Puntos Respira</h4>
+      <h4>100</h4>
+      <p>(500 restantes esta semana)</p>
+    </div>
+
+    <div id="map"></div>
+  </body>
+</html>
