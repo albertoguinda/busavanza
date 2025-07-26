@@ -5,8 +5,8 @@
 
 ---
 
-[🌐 Live Demo](https://busavanza.vercel.app/) | [💻 Código en GitHub](https://github.com/albertoguinda/busavanza)  
-[![GitHub](https://img.shields.io/badge/GitHub-albertoguinda-181717?logo=github)](https://github.com/albertoguinda)  
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-busavanza.vercel.app-10C8FF)](https://busavanza.vercel.app/)  
+[![GitHub](https://img.shields.io/badge/GitHub-busavanza-181717?logo=github)](https://github.com/albertoguinda/busavanza)  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Alberto-0A66C2?logo=linkedin)](https://www.linkedin.com/in/albertoguindasevilla/)
 
 ---
@@ -31,21 +31,11 @@ git clone https://github.com/albertoguinda/busavanza.git
 cd busavanza
 npm install
 npm run dev
-```
-
-# Abre en el navegador:
-
-http://localhost:3000
-
----
+Abre http://localhost:3000 en tu navegador.
 
 📜 Licencia & Créditos
 MIT © Alberto Guinda Sevilla
 
-GitHub: github.com/albertoguinda
-
-LinkedIn: linkedin.com/in/albertoguindasevilla
-
-```
-
+GitHub	albertoguinda
+LinkedIn	albertoguindasevilla
 ```
